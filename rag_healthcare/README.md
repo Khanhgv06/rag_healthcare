@@ -52,39 +52,29 @@ source .venv/bin/activate        # On Linux/macOS
 .venv\Scripts\activate           # On Windows
 2. Install dependencies
 pip install -r requirements.txt
+pip install pip install langchain_google_genai
+pip install qdrant_client
+pip install dotenv
+pip install langchain_community
+pip install pypdf
 
 
 🚀 How to Use
-Step 1: Load and split PDF
+Step 1: 🐳 Run Qdrant Locally
+bash:
+docker run -d --name qdrant -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage qdrant/qdrant:latest
 
-from src.load_split_data import load_and_split_pdf
-documents = load_and_split_pdf("data_dotquy/dotquy.pdf")
-
-Step 2: Initialize retriever
-
-from src.vector_store import setup_vector_store
-retriever = setup_vector_store(documents, retriever_type="qdrant")  # or "faiss"
+Step 2: collection data
+bash:
+python cli.py add data_dotquy --collection dotquy
 
 
-Step 3: Ask a question
-
-from src.custom import ask_question
-query = "What are the symptoms and causes of stroke?"
-answer = ask_question(query, retriever)
-print(answer)
-
-🧠 Example Metadata
-Document(
-    page_content="A stroke occurs when the blood supply to the brain is interrupted...",
-    metadata={"source": "dotquy.pdf", "doc_id": "stroke_001"}
-)
+Step 3: run main file to ask a question 
+bash:
+python main.py
 
 
-🐳 Run Qdrant Locally
-./run_qdrant.sh
-Or manually using Docker:
 
-docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
 
 
 📄 License
